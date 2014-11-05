@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: Maze
+  m_Name: Maze Passage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,16 +36,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1592517cf81484424a60f86dfcafc7eb, type: 3}
+  m_Script: {fileID: 11500000, guid: dd3a64f7c1bdf4b14bc8c63351204453, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size:
-    x: 20
-    z: 20
-  cellPrefab: {fileID: 11400000, guid: c7023aff4002642ffba5c220a8a4cfbc, type: 2}
-  generationStepDelay: .00999999978
-  passagePrefab: {fileID: 11400000, guid: 177fc7f6ebab5497090d1fe4cbd6ecff, type: 2}
-  wallPrefab: {fileID: 11400000, guid: 59de9221896654d3c8ce6d02c3f32431, type: 2}
+  cell: {fileID: 0}
+  otherCell: {fileID: 0}
+  direction: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

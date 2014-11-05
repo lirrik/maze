@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Maze : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class Maze : MonoBehaviour
     public MazeCell cellPrefab;
     public float generationStepDelay;
     private MazeCell[,] cells;
+    public MazePassage passagePrefab;
+    public MazeWall wallPrefab;
     
     public IntVector2 RandomCoordinates
     {
@@ -21,25 +24,7 @@ public class Maze : MonoBehaviour
         return coordinate.x >= 0 && coordinate.x < size.x && coordinate.z >= 0 && coordinate.z < size.z;
     }
     
-    public MazeCell GetCell(IntVector2 coordinates)
-    {
-        return cells[coordinates.x, coordinates.z];
-    }
-    
-    public IEnumerator Generate()
-    {
-        WaitForSeconds delay = new WaitForSeconds(generationStepDelay);
-        cells = new MazeCell[size.x, size.z];
-        IntVector2 coordinates = RandomCoordinates;
-        while (ContainsCoordinates(coordinates) && GetCell(coordinates) == null)
-        {
-            yield return delay;
-            CreateCell(coordinates);
-            coordinates += MazeDirections.RandomValue.ToIntVector2();
-        }
-    }
-    
-    private void CreateCell(IntVector2 coordinates)
+    private MazeCell CreateCell(IntVector2 coordinates)
     {
         MazeCell newCell = Instantiate(cellPrefab) as MazeCell;
         cells[coordinates.x, coordinates.z] = newCell;
@@ -48,5 +33,76 @@ public class Maze : MonoBehaviour
         newCell.transform.parent = transform;
         newCell.transform.localPosition =
             new Vector3(coordinates.x - size.x * 0.5f + 0.5f, 0f, coordinates.z - size.z * 0.5f + 0.5f);
+        return newCell;
+    }
+    
+    public MazeCell GetCell(IntVector2 coordinates)
+    {
+        return cells[coordinates.x, coordinates.z];
+    }
+    
+    private void DoFirstGenerationStep(List<MazeCell> activeCells)
+    {
+        activeCells.Add(CreateCell(RandomCoordinates));
+    }
+    
+    private void CreatePassage(MazeCell cell, MazeCell otherCell, MazeDirection direction)
+    {
+        MazePassage passage = Instantiate(passagePrefab) as MazePassage;
+        passage.Initialize(cell, otherCell, direction);
+        passage = Instantiate(passagePrefab) as MazePassage;
+        passage.Initialize(otherCell, cell, direction.GetOpposite());
+    }
+    
+    private void CreateWall(MazeCell cell, MazeCell otherCell, MazeDirection direction)
+    {
+        MazeWall wall = Instantiate(wallPrefab) as MazeWall;
+        wall.Initialize(cell, otherCell, direction);
+        if (otherCell != null)
+        {
+            wall = Instantiate(wallPrefab) as MazeWall;
+            wall.Initialize(otherCell, cell, direction.GetOpposite());
+        }
+    }
+    
+    private void DoNextGenerationStep(List<MazeCell> activeCells)
+    {
+        int currentIndex = activeCells.Count - 1;
+        MazeCell currentCell = activeCells[currentIndex];
+        MazeDirection direction = MazeDirections.RandomValue;
+        IntVector2 coordinates = currentCell.coordinates + direction.ToIntVector2();
+        if (ContainsCoordinates(coordinates))
+        {
+            MazeCell neighbor = GetCell(coordinates);
+            if (neighbor == null)
+            {
+                neighbor = CreateCell(coordinates);
+                CreatePassage(currentCell, neighbor, direction);
+                activeCells.Add(neighbor);
+            }
+            else
+            {
+                CreateWall(currentCell, neighbor, direction);
+                activeCells.RemoveAt(currentIndex);
+            }
+        }
+        else
+        {
+            CreateWall(currentCell, null, direction);
+            activeCells.RemoveAt(currentIndex);
+        }
+    }
+    
+    public IEnumerator Generate()
+    {
+        WaitForSeconds delay = new WaitForSeconds(generationStepDelay);
+        cells = new MazeCell[size.x, size.z];
+        List<MazeCell> activeCells = new List<MazeCell>();
+        DoFirstGenerationStep(activeCells);
+        while (activeCells.Count > 0)
+        {
+            yield return delay;
+            DoNextGenerationStep(activeCells);
+        }
     }
 }

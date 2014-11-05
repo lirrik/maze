@@ -54,4 +54,20 @@ public class MazeCell : MonoBehaviour
         room.Add(this);
         transform.GetChild(0).GetComponent<Renderer>().material = room.settings.floorMaterial;
     }
+    
+    public void OnPlayerEntered()
+    {
+        for (int i = 0; i < edges.Length; i++)
+        {
+            edges[i].OnPlayerEntered();
+        }
+    }
+    
+    public void OnPlayerExited()
+    {
+        for (int i = 0; i < edges.Length; i++)
+        {
+            edges[i].OnPlayerExited();
+        }
+    }
 }

@@ -15,4 +15,12 @@ public abstract class MazeCellEdge : MonoBehaviour
         transform.localPosition = Vector3.zero;
         transform.localRotation = direction.ToRotation();
     }
+    
+    public virtual void OnPlayerEntered()
+    {
+    }
+    
+    public virtual void OnPlayerExited()
+    {
+    }
 }

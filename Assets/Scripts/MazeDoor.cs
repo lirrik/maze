@@ -41,10 +41,12 @@ public class MazeDoor : MazePassage
     {
         OtherSideOfDoor.hinge.localRotation = hinge.localRotation =
             isMirrored ? mirroredRotation : normalRotation;
+        OtherSideOfDoor.cell.room.Show();
     }
     
     public override void OnPlayerExited()
     {
         OtherSideOfDoor.hinge.localRotation = hinge.localRotation = Quaternion.identity;
+        OtherSideOfDoor.cell.room.Hide();
     }
 }

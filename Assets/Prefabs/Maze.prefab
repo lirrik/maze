@@ -45,7 +45,19 @@ MonoBehaviour:
   cellPrefab: {fileID: 11400000, guid: c7023aff4002642ffba5c220a8a4cfbc, type: 2}
   generationStepDelay: .00999999978
   passagePrefab: {fileID: 11400000, guid: 177fc7f6ebab5497090d1fe4cbd6ecff, type: 2}
-  wallPrefab: {fileID: 11400000, guid: 59de9221896654d3c8ce6d02c3f32431, type: 2}
+  wallPrefabs:
+  - {fileID: 11400000, guid: 59de9221896654d3c8ce6d02c3f32431, type: 2}
+  - {fileID: 11400000, guid: 59de9221896654d3c8ce6d02c3f32431, type: 2}
+  - {fileID: 11400000, guid: 59de9221896654d3c8ce6d02c3f32431, type: 2}
+  - {fileID: 11400000, guid: 59de9221896654d3c8ce6d02c3f32431, type: 2}
+  - {fileID: 11400000, guid: 59de9221896654d3c8ce6d02c3f32431, type: 2}
+  - {fileID: 11400000, guid: 59de9221896654d3c8ce6d02c3f32431, type: 2}
+  - {fileID: 11400000, guid: 59de9221896654d3c8ce6d02c3f32431, type: 2}
+  - {fileID: 11400002, guid: 057b7e231030049f9a3f3e033926ab42, type: 2}
+  - {fileID: 11400000, guid: d61d85f53c9da4244986893237736493, type: 2}
+  - {fileID: 11400000, guid: f489487ab599f45b181d62c31aa46aa7, type: 2}
+  doorPrefab: {fileID: 11400000, guid: ddd2858d08f2e45f3b4b479b51caf822, type: 2}
+  doorProbability: .100000001
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

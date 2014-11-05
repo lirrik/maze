@@ -112,6 +112,7 @@ MonoBehaviour:
   cell: {fileID: 0}
   otherCell: {fileID: 0}
   direction: 0
+  wall: {fileID: 400000}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -7,13 +7,14 @@ public class Maze : MonoBehaviour
     public IntVector2 size;
     public MazeCell cellPrefab;
     public float generationStepDelay;
-    private MazeCell[,] cells;
     public MazePassage passagePrefab;
     public MazeWall[] wallPrefabs;
     public MazeDoor doorPrefab;
+    public MazeRoomSettings[] roomSettings;
     [Range(0f, 1f)]
     public float
         doorProbability;
+    private MazeCell[,] cells;
     
     public IntVector2 RandomCoordinates
     {
@@ -47,7 +48,9 @@ public class Maze : MonoBehaviour
     
     private void DoFirstGenerationStep(List<MazeCell> activeCells)
     {
-        activeCells.Add(CreateCell(RandomCoordinates));
+        MazeCell newCell = CreateCell(RandomCoordinates);
+        newCell.Initialize(CreateRoom(-1));
+        activeCells.Add(newCell);
     }
     
     private void CreatePassage(MazeCell cell, MazeCell otherCell, MazeDirection direction)
@@ -56,6 +59,14 @@ public class Maze : MonoBehaviour
         MazePassage passage = Instantiate(prefab) as MazePassage;
         passage.Initialize(cell, otherCell, direction);
         passage = Instantiate(prefab) as MazePassage;
+        if (passage is MazeDoor)
+        {
+            otherCell.Initialize(CreateRoom(cell.room.settingsIndex));
+        }
+        else
+        {
+            otherCell.Initialize(cell.room);
+        }
         passage.Initialize(otherCell, cell, direction.GetOpposite());
     }
     
@@ -112,5 +123,20 @@ public class Maze : MonoBehaviour
             yield return delay;
             DoNextGenerationStep(activeCells);
         }
+    }
+    
+    private List<MazeRoom> rooms = new List<MazeRoom>();
+    
+    private MazeRoom CreateRoom(int indexToExclude)
+    {
+        MazeRoom newRoom = ScriptableObject.CreateInstance<MazeRoom>();
+        newRoom.settingsIndex = Random.Range(0, roomSettings.Length);
+        if (newRoom.settingsIndex == indexToExclude)
+        {
+            newRoom.settingsIndex = (newRoom.settingsIndex + 1) % roomSettings.Length;
+        }
+        newRoom.settings = roomSettings[newRoom.settingsIndex];
+        rooms.Add(newRoom);
+        return newRoom;
     }
 }

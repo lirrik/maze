@@ -39,6 +39,16 @@ public static class MazeDirections
         MazeDirection.East
     };
     
+    public static MazeDirection GetNextClockwise(this MazeDirection direction)
+    {
+        return (MazeDirection)(((int)direction + 1) % Count);
+    }
+    
+    public static MazeDirection GetNextCounterclockwise(this MazeDirection direction)
+    {
+        return (MazeDirection)(((int)direction + Count - 1) % Count);
+    }
+    
     public static MazeDirection GetOpposite(this MazeDirection direction)
     {
         return opposites[(int)direction];
